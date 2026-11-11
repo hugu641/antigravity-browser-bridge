@@ -1,0 +1,27 @@
+{
+  "name": "antigravity-browser-bridge",
+  "version": "1.0.0",
+  "description": "Pilotez directement votre vrai navigateur Google Chrome / Brave depuis l'agent IA Antigravity",
+  "main": "bin/cli.js",
+  "bin": {
+    "antigravity-browser": "./bin/cli.js",
+    "antigravity-browser-bridge": "./bin/cli.js"
+  },
+  "keywords": [
+    "antigravity",
+    "agent-skills",
+    "browser-automation",
+    "chrome-extension",
+    "ai-agent",
+    "claude-code"
+  ],
+  "author": "Hugu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ton-pseudo/antigravity-browser-bridge"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

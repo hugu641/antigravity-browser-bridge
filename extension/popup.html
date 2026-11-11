@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity Bridge</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="logo">
+        <span class="icon">✦</span>
+        <h1>Antigravity</h1>
+      </div>
+      <div id="statusBadge" class="badge disconnected">Déconnecté</div>
+    </div>
+
+    <div class="content">
+      <div class="info-row">
+        <span class="label">Serveur local :</span>
+        <span class="value code">ws://127.0.0.1:8765</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Projet actif :</span>
+        <span id="activeProject" class="value">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Dernière action :</span>
+        <span id="lastAction" class="value">-</span>
+      </div>
+
+      <div id="errorBox" class="error-box hidden">
+        <span class="error-title">Erreur :</span>
+        <span id="errorMessage" class="error-text"></span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="reconnectBtn" class="btn primary">Reconnecter</button>
+      <button id="pingBtn" class="btn secondary">Tester</button>
+    </div>
+
+    <div class="footer">
+      <span>Prêt pour l'automatisation autonome.</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

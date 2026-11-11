@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Captures temporaires
+*.png
+!extension/icons/*.png
+
+# IDE & OS
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
