@@ -18,42 +18,35 @@ Pilotez directement votre session active (**Brave**, **Google Chrome**, **Edge**
 
 ## ⚡ Installation Rapide avec NPX (Sans rien cloner)
 
-Vous pouvez installer et configurer tout le projet en **une seule commande** :
+Vous pouvez installer les dépendances et configurer le skill Antigravity en **une seule commande** :
 
 ```bash
 npx github:hugu641/antigravity-browser-bridge
 ```
 
 > **Ce que fait cette commande automatiquement :**
-> 1. 📦 Installe les dépendances Python nécessaires (`websockets`, `Pillow`).
-> 2. 🤖 Déploie le skill `browser-operator` dans votre configuration Antigravity.
-> 3. 📋 Copie directement le chemin de l'extension dans votre presse-papier.
+> 1. 📦 Installe les dépendances Python requises (`websockets`, `Pillow`).
+> 2. 🤖 Enregistre le skill `browser-operator` dans votre configuration Antigravity.
+> 3. 📋 **Copie automatiquement le chemin du dossier de l'extension dans votre presse-papier**.
 
 ---
 
-## 🚀 Activation de l'Extension
+## 🔌 Activation de l'Extension (À faire 1 seule fois)
 
-Vous avez **deux méthodes** pour l'activer :
+> **🔒 Pourquoi une action manuelle est obligatoire :**  
+> Par mesure de sécurité stricte, le moteur Chromium (**Brave**, **Google Chrome**, **Edge**) interdit formellement à tout script externe d'installer silencieusement une extension dans votre profil sans validation humaine. Cela protège vos mots de passe, cookies et sessions actives contre les logiciels malveillants.
 
-### Option A : Activation 100% Automatique (Zéro Clic)
-Lancez votre navigateur avec l'extension pré-injectée en une commande :
+L'activation ne prend que **10 secondes et ne se fait qu'une seule fois** :
 
-```bash
-npx github:hugu641/antigravity-browser-bridge launch
-```
-*(Fonctionne avec **Brave**, **Google Chrome** et **Microsoft Edge** via le drapeau Chromium `--load-extension` : l'extension est chargée et active immédiatement, sans jamais avoir besoin d'ouvrir la page des extensions !)*
-
----
-
-### Option B : Activation dans votre navigateur déjà ouvert
-Si votre navigateur est déjà ouvert avec vos sessions :
-1. Rendez-vous sur :
+1. Ouvrez votre navigateur et accédez à :
    * **Brave :** `brave://extensions/`
    * **Chrome :** `chrome://extensions/`
    * **Edge :** `edge://extensions/`
 2. Activez l'interrupteur **[Mode développeur]** (en haut à droite).
 3. Cliquez sur **[Charger l'extension non empaquetée]** (en haut à gauche).
-4. Le chemin a été copié automatiquement : faites simplement **`Ctrl + V`** dans la fenêtre de sélection !
+4. Le chemin étant déjà dans votre presse-papier : faites simplement **`Ctrl + V`** dans la boîte de dialogue et validez !
+
+*Dès que c'est fait, l'extension reste active définitivement.* Tout le reste (le démarrage du serveur bridge, les actions de l'IA, le regroupement des onglets et l'extinction du serveur) est **100% autonome et invisible**.
 
 ---
 

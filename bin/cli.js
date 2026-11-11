@@ -139,20 +139,23 @@ function setupExtension() {
   const copied = copyToClipboard(EXT_DIR);
 
   console.log(`
-${c.green}${c.bold}✨ INSTALLATION TERMINÉE AVEC SUCCÈS !${c.reset}
+${c.green}${c.bold}✨ INSTALLATION TERMINÉE !${c.reset}
 
-${c.bold}Deux options pour activer l'extension :${c.reset}
+${c.bold}Dernière étape (à faire 1 seule fois dans votre navigateur) :${c.reset}
 
-${c.cyan}${c.bold}A. Activation 100% Automatique (Zéro clic) :${c.reset}
-   Lancez simplement votre navigateur avec l'extension pré-injectée :
-   ${c.bold}npx github:hugu641/antigravity-browser-bridge launch${c.reset}
-   ${c.dim}→ Votre navigateur s'ouvre avec l'extension active immédiatement.${c.reset}
+${c.yellow}Note de sécurité Chromium :${c.reset} Pour protéger vos mots de passe et cookies,
+Chromium exige une confirmation manuelle pour charger une extension locale.
 
-${c.yellow}${c.bold}B. Activation dans votre navigateur déjà ouvert :${c.reset}
-   1. Rendez-vous sur : ${c.cyan}brave://extensions/${c.reset} ou ${c.cyan}chrome://extensions/${c.reset}
-   2. Activez le ${c.bold}[Mode développeur]${c.reset} (en haut à droite).
-   3. Cliquez sur ${c.bold}[Charger l'extension non empaquetée]${c.reset}.
-   4. ${copied ? `Collez le chemin déjà présent dans votre presse-papier (${c.bold}Ctrl+V${c.reset}) !` : `Sélectionnez le dossier : ${EXT_DIR}`}
+1. Rendez-vous sur :
+   ${c.cyan}brave://extensions/${c.reset}  ou  ${c.cyan}chrome://extensions/${c.reset}
+
+2. Activez l'interrupteur ${c.bold}[Mode développeur]${c.reset} (en haut à droite).
+
+3. Cliquez sur ${c.bold}[Charger l'extension non empaquetée]${c.reset} (en haut à gauche).
+
+4. ${copied ? `${c.green}${c.bold}Le chemin du dossier est DÉJÀ dans votre presse-papier !${c.reset}\n   Faites simplement ${c.bold}Ctrl + V${c.reset} dans la fenêtre de sélection puis validez.` : `Sélectionnez le dossier : ${EXT_DIR}`}
+
+${c.dim}Une fois chargée, l'extension reste active définitivement et le bridge est 100% autonome.${c.reset}
 `);
 }
 
