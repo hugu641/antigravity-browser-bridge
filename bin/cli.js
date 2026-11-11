@@ -80,6 +80,60 @@ function installPythonDeps() {
   }
 }
 
+function findBrowser() {
+  if (process.platform === 'win32') {
+    const candidates = [
+      path.join(process.env.LOCALAPPDATA || '', 'BraveSoftware', 'Brave-Browser', 'Application', 'brave.exe'),
+      path.join(process.env.PROGRAMFILES || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+      path.join(process.env['PROGRAMFILES(X86)'] || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+      path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+      path.join(process.env['PROGRAMFILES(X86)'] || '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+      path.join(process.env.PROGRAMFILES || '', 'Microsoft', 'Edge', 'Application', 'msedge.exe')
+    ];
+    return candidates.find(p => fs.existsSync(p));
+  } else if (process.platform === 'darwin') {
+    const candidates = [
+      '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge'
+    ];
+    return candidates.find(p => fs.existsSync(p));
+  } else {
+    const candidates = ['brave-browser', 'google-chrome', 'chromium-browser', 'chromium'];
+    for (const bin of candidates) {
+      try {
+        execSync(`which ${bin}`, { stdio: 'ignore' });
+        return bin;
+      } catch (_) {}
+    }
+  }
+  return null;
+}
+
+function launchBrowserAuto() {
+  const browser = findBrowser();
+  if (!browser) {
+    console.log(`${c.red}✗${c.reset} Aucun navigateur Chromium (Brave/Chrome/Edge) détecté automatiquement.`);
+    return false;
+  }
+
+  const browserName = path.basename(browser).replace(/\.exe$/i, '');
+  console.log(`\n🚀 Lancement automatique de ${c.bold}${browserName}${c.reset} avec l'extension activée...`);
+  
+  try {
+    const child = spawn(browser, [`--load-extension=${EXT_DIR}`], {
+      detached: true,
+      stdio: 'ignore'
+    });
+    child.unref();
+    console.log(`   ${c.green}✓${c.reset} Navigateur lancé ! L'extension est ${c.bold}${c.green}chargée automatiquement sans aucun clic${c.reset}.`);
+    return true;
+  } catch (err) {
+    console.log(`   ${c.yellow}!${c.reset} Impossible de lancer automatiquement : ${err.message}`);
+    return false;
+  }
+}
+
 function setupExtension() {
   console.log(`\n${c.yellow}[3/3]${c.reset} Configuration de l'extension de navigation...`);
   const copied = copyToClipboard(EXT_DIR);
@@ -87,30 +141,28 @@ function setupExtension() {
   console.log(`
 ${c.green}${c.bold}✨ INSTALLATION TERMINÉE AVEC SUCCÈS !${c.reset}
 
-Pour activer l'extension dans votre navigateur :
+${c.bold}Deux options pour activer l'extension :${c.reset}
 
-1. Ouvrez ${c.bold}Brave${c.reset} ou ${c.bold}Chrome${c.reset} et allez sur :
-   ${c.cyan}brave://extensions/${c.reset}   ou   ${c.cyan}chrome://extensions/${c.reset}
+${c.cyan}${c.bold}A. Activation 100% Automatique (Zéro clic) :${c.reset}
+   Lancez simplement votre navigateur avec l'extension pré-injectée :
+   ${c.bold}npx github:hugu641/antigravity-browser-bridge launch${c.reset}
+   ${c.dim}→ Votre navigateur s'ouvre avec l'extension active immédiatement.${c.reset}
 
-2. Activez le ${c.bold}[Mode développeur]${c.reset} (en haut à droite).
-
-3. Cliquez sur ${c.bold}[Charger l'extension non empaquetée]${c.reset} (en haut à gauche).
-
-4. ${copied ? `${c.green}${c.bold}LE CHEMIN DU DOSSIER A ÉTÉ COPIÉ DANS VOTRE PRESSE-PAPIER !${c.reset}\n   Faites simplement ${c.bold}Ctrl+V${c.reset} dans la barre de sélection.` : `Sélectionnez le dossier : ${c.bold}${EXT_DIR}${c.reset}`}
+${c.yellow}${c.bold}B. Activation dans votre navigateur déjà ouvert :${c.reset}
+   1. Rendez-vous sur : ${c.cyan}brave://extensions/${c.reset} ou ${c.cyan}chrome://extensions/${c.reset}
+   2. Activez le ${c.bold}[Mode développeur]${c.reset} (en haut à droite).
+   3. Cliquez sur ${c.bold}[Charger l'extension non empaquetée]${c.reset}.
+   4. ${copied ? `Collez le chemin déjà présent dans votre presse-papier (${c.bold}Ctrl+V${c.reset}) !` : `Sélectionnez le dossier : ${EXT_DIR}`}
 `);
-
-  // Ouvrir automatiquement l'URL des extensions si possible
-  try {
-    if (process.platform === 'win32') {
-      execSync('start brave://extensions/ || start chrome://extensions/', { stdio: 'ignore' });
-    }
-  } catch (_) {}
 }
 
 const args = process.argv.slice(2);
 const command = args[0];
 
-if (command === 'start') {
+if (command === 'launch' || command === 'browser' || command === 'open') {
+  banner();
+  launchBrowserAuto();
+} else if (command === 'start') {
   banner();
   console.log(`Démarrage du serveur bridge...`);
   require('child_process').spawn('python', [path.join(ROOT_DIR, 'bridge', 'server.py')], { stdio: 'inherit' });
