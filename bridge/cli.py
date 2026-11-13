@@ -153,7 +153,12 @@ def main():
     nav_parser.add_argument("url", help="URL cible (ex: https://create.roblox.com)")
     nav_parser.add_argument("--project", "-p", help="Nom du projet pour ranger l'onglet dans un groupe [Projet]-antigravity")
     nav_parser.add_argument("--new-tab", "-n", action="store_true", help="Ouvrir dans un nouvel onglet")
+    nav_parser.add_argument("--activate", "-a", action="store_true", help="Amener l'onglet au premier plan (par défaut: reste en arrière-plan)")
     nav_parser.add_argument("--timeout", "-t", type=int, default=20, help="Délai d'attente max en secondes")
+
+    # Pause / Resume
+    subparsers.add_parser("pause", help="Mettre en pause les actions automatiques d'Antigravity")
+    subparsers.add_parser("resume", help="Reprendre les actions automatiques d'Antigravity")
 
     # Screenshot
     snap_parser = subparsers.add_parser("screenshot", help="Prendre une capture d'écran de l'onglet actif")
@@ -223,12 +228,24 @@ def main():
         print(json.dumps(res, indent=2, ensure_ascii=False))
         return
 
+    if args.command == "pause":
+        res = call_bridge("pause", {})
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+        return
+
+    if args.command == "resume":
+        res = call_bridge("resume", {})
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+        return
+
     if args.command == "navigate":
         params = {"url": args.url}
         if args.project:
             params["project"] = args.project
         if args.new_tab:
             params["new_tab"] = True
+        if args.activate:
+            params["active"] = True
         params["timeout_ms"] = args.timeout * 1000
         res = call_bridge("navigate", params)
         print(json.dumps(res, indent=2, ensure_ascii=False))
@@ -256,20 +273,18 @@ def main():
         if args.x is not None and args.y is not None:
             params["x"] = args.x
             params["y"] = args.y
-        params["selector"] = args.selector if args.selector else ""
-        if args.text:
-            params["text"] = args.text
+        params["selector"] = args.selector or ""
+        params["text"] = args.text or ""
         res = call_bridge("click", params)
         print(json.dumps(res, indent=2, ensure_ascii=False))
 
     elif args.command == "type":
-        params = {"text": args.text}
-        if args.selector:
-            params["selector"] = args.selector
-        if args.press_enter:
-            params["press_enter"] = True
-        if args.clear:
-            params["clear"] = True
+        params = {
+            "text": args.text,
+            "selector": args.selector or "",
+            "press_enter": bool(args.press_enter),
+            "clear": bool(args.clear)
+        }
         res = call_bridge("type", params)
         print(json.dumps(res, indent=2, ensure_ascii=False))
 
